@@ -52,4 +52,4 @@ The external 3D model used in this experiment was downloaded from Sketchfab.
 
 ## Lab 01 Link
 
-https://jmjimmy20.github.io/3DModelRender/
+https://jmjimmy20.github.io/Lab01_3DModelRender
