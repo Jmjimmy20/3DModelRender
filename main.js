@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 /**
  * 1. RENDERER
@@ -64,7 +65,40 @@ scene.add(dirLight);
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshStandardMaterial({ color: '#6c63ff'});
 const cube = new THREE.Mesh(geometry, material);
+cube.position.set(-1.5, 0, 0);
 scene.add(cube);
+
+//Load 3D model
+const loader = new GLTFLoader();
+
+loader.load(
+    'models/pokeball.glb',
+
+    //onLoad: Run when the 3D model has been downloaded and is ready
+    (gltf) => {
+        const model = gltf.scene;
+
+        //Box3 calcualtes its actual size so it can be adjusted 
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+
+        //Set high on 1.5
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = 2.5 / maxDim;
+        model.scale.setScalar(scale);
+
+        model.position.set(1.5, 0, 0);
+        scene.add(model);
+    },
+
+    // onProgress: optional, useful for viewing the download progress
+    undefined,
+
+    // onError: if something goes wrong (misspelled name, corrupted file, etc.)
+     (error) => {
+        console.error('Error cargando el modelo:', error);
+    }
+);
 
 /**
  * 7. ANIMATION LOOP
